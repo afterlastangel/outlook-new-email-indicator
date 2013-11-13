@@ -51,15 +51,17 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
        # request is either for a file to be served up or our test
        if parsedParams.path == "/email":
-          self.processIncomeRequest(queryParsed)
+          self.processIncomeRequest(queryParsed, "email")
+       if parsedParams.path == "/reminder":
+          self.processIncomeRequest(queryParsed, "reminder")
        elif parsedParams.path == "/clear":         
          self.processClearRequest(queryParsed)
           # Default to serve up a local file 
           #SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self);
 
-  def processIncomeRequest(self, query):    
+  def processIncomeRequest(self, query, nofiType):    
     indicator.ind.set_status(appindicator.STATUS_ATTENTION)
-    n = pynotify.Notification ("New email received");
+    n = pynotify.Notification ("New " + nofiType + " received");
     n.set_urgency(pynotify.URGENCY_NORMAL)
     n.set_timeout(3)
     n.show();
